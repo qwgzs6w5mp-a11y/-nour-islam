@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#064b3b">
+<title>NOUR ISLAM</title>
+<style>
+:root{--green:#075b46;--deep:#043d32;--gold:#d8b45b;--cream:#f7f5ed;--ink:#173b31;--muted:#718078}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:linear-gradient(145deg,var(--deep),var(--green));color:#fff;padding:calc(22px + env(safe-area-inset-top)) 18px 27px;border-radius:0 0 26px 26px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-size:23px;font-weight:850;letter-spacing:1.8px}.brand span{color:var(--gold)}
+select,button{font:inherit;border-radius:12px;border:1px solid #d9e2dc;padding:10px;background:#fff;color:var(--ink)}
+select{max-width:48%}
+h1{font-size:27px;margin:25px 0 4px}.subtitle{margin:0;opacity:.86}
+.date{margin-top:15px;color:#f4dfaa;font-size:14px}
+main{max-width:740px;margin:auto;padding:15px 15px 28px}
+.card{background:#fff;border-radius:19px;padding:17px;margin:13px 0;box-shadow:0 5px 18px #173b3112}
+h2{font-size:18px;margin:0 0 12px;color:var(--green)}
+.location{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.location-name{font-size:13px;color:var(--muted);flex:1;min-width:130px}
+.primary{background:var(--green);color:#fff;border:0;font-weight:650}
+.prayers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.prayer{background:#f0f6f1;border-radius:12px;text-align:center;padding:11px 2px}
+.prayer b{display:block;font-size:11px}.prayer strong{display:block;margin-top:6px;font-size:14px;color:var(--green)}
+.status{font-size:12px;color:var(--muted);line-height:1.45;margin:10px 0 0}
+.method-row{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.method-row label{font-size:12px;color:var(--muted)}
+.method-row select{font-size:12px;max-width:100%;padding:8px}
+.arabic{font-family:serif;font-size:27px;line-height:1.9;text-align:right;direction:rtl}
+.translation{line-height:1.55;margin:8px 0}
+.note{font-size:12px;color:var(--muted);margin:0}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.tile{background:#f0f6f1;border:0;text-align:left;padding:14px;min-height:78px}
+.tile span{display:block;font-size:22px;margin-bottom:5px}.tile b{color:var(--green)}
+.qibla-result{font-size:18px;color:var(--green);font-weight:700;margin-top:8px}
+footer{text-align:center;padding:16px 15px 28px;color:var(--muted);font-size:12px}
+[dir=rtl] .tile{text-align:right}
+@media(max-width:390px){.prayers{gap:3px}.prayer b{font-size:10px}.prayer strong{font-size:12px}.brand{font-size:20px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="brand">☾ NOUR <span>ISLAM</span></div>
+    <select id="language" aria-label="Language">
+      <option value="fr">Français</option><option value="ar">العربية</option><option value="en">English</option>
+    </select>
+  </div>
+  <h1 id="welcome">La foi au quotidien</h1>
+  <p class="subtitle" id="tagline">Un compagnon spirituel, partout dans le monde.</p>
+  <div class="date" id="today"></div>
+</header>
+<main>
+  <section class="card">
+    <h2 id="prayerTitle">Horaires de prière</h2>
+    <div class="location">
+      <span class="location-name" id="locationName">Localisation non définie</span>
+      <button class="primary" id="locateButton">📍 Utiliser ma position</button>
+    </div>
+    <div class="prayers" id="prayerTimes"></div>
+    <div class="method-row">
+      <label for="method" id="methodLabel">Méthode de calcul</label>
+      <select id="method">
+        <option value="">Automatique (autorité la plus proche)</option>
+        <option value="12">France — UOIF</option>
+        <option value="3">Ligue islamique mondiale</option>
+        <option value="5">Égypte</option>
+        <option value="4">Umm al-Qura — La Mecque</option>
+        <option value="13">Diyanet — Turquie</option>
+        <option value="21">Maroc</option>
+      </select>
+    </div>
+    <p class="status" id="prayerStatus">Appuie sur « Utiliser ma position » pour afficher les horaires. Les horaires peuvent différer de ceux de ta mosquée.</p>
+  </section>
+
+  <section class="card">
+    <h2 id="quranTitle">Le Coran</h2>
+    <div class="arabic" lang="ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+    <p class="translation" id="basmalaTranslation">Au nom d’Allah, le Tout Miséricordieux, le Très Miséricordieux.</p>
+    <p class="note" id="quranNote">Formule d’ouverture — traduction du sens</p>
+  </section>
+
+  <section class="card">
+    <h2 id="discoverTitle">À découvrir</h2>
+    <div class="tiles">
+      <button class="tile" id="qiblaButton"><span>🧭</span><b id="qiblaLabel">Direction de la Qibla</b></button>
+      <button class="tile" id="duaButton"><span>🤲</span><b id="duaLabel">Invocations</b></button>
+      <button class="tile" id="hadithButton"><span>📚</span><b id="hadithLabel">Hadiths authentifiés</b></button>
+      <button class="tile" id="learnButton"><span>🌱</span><b id="learnLabel">Apprentissage</b></button>
+    </div>
+    <p class="status" id="featureStatus">Ces modules seront ajoutés progressivement avec des références vérifiables.</p>
+    <div id="qiblaResult" class="qibla-result" hidden></div>
+  </section>
+</main>
+<footer>نُور الإسلام · NOUR ISLAM</footer>
+
+<script>
+const translations = {
+fr:{
+ welcome:"La foi au quotidien",tagline:"Un compagnon spirituel, partout dans le monde.",
+ prayerTitle:"Horaires de prière",locationUnset:"Localisation non définie",locate:"📍 Utiliser ma position",
+ methodLabel:"Méthode de calcul",autoMethod:"Automatique (autorité la plus proche)",
+ prayerStatus:"Appuie sur « Utiliser ma position » pour afficher les horaires. Les horaires peuvent différer de ceux de ta mosquée.",
+ quranTitle:"Le Coran",basmala:"Au nom d’Allah, le Tout Miséricordieux, le Très Miséricordieux.",
+ quranNote:"Formule d’ouverture — traduction du sens",discoverTitle:"À découvrir",
+ qibla:"Direction de la Qibla",dua:"Invocations",hadith:"Hadiths authentifiés",learn:"Apprentissage",
+ featureStatus:"Ces modules seront ajoutés progressivement avec des références vérifiables.",
+ names:["Fajr","Dohr","Asr","Maghrib","Isha"],loading:"Recherche des horaires…",
+ error:"La localisation ou le service est indisponible. Vérifie les autorisations et réessaie.",
+ qiblaReady:"Direction de la Qibla : ",degrees:"° depuis le nord géographique.",
+ modules:{qibla:"La direction de la Qibla s’affichera après autorisation de la localisation.",dua:"La bibliothèque d’invocations sera construite avec les textes arabes et leurs références.",hadith:"Les hadiths seront présentés avec leur source et leur degré d’authenticité lorsqu’il est établi.",learn:"Les leçons seront organisées par niveau, avec références coraniques et explications vérifiées."}
+},
+en:{
+ welcome:"Faith in everyday life",tagline:"A spiritual companion, wherever you are.",
+ prayerTitle:"Prayer times",locationUnset:"Location not set",locate:"📍 Use my location",
+ methodLabel:"Calculation method",autoMethod:"Automatic (nearest authority)",
+ prayerStatus:"Tap “Use my location” to show prayer times. Times may differ from your local mosque.",
+ quranTitle:"The Qur’an",basmala:"In the name of Allah, the Most Compassionate, the Most Merciful.",
+ quranNote:"Opening formula — translation of the meaning",discoverTitle:"Explore",
+ qibla:"Qibla direction",dua:"Supplications",hadith:"Verified hadith",learn:"Learning",
+ featureStatus:"These modules will be added gradually with verifiable references.",
+ names:["Fajr","Dhuhr","Asr","Maghrib","Isha"],loading:"Loading prayer times…",
+ error:"Location or service unavailable. Check permissions and try again.",
+ qiblaReady:"Qibla direction: ",degrees:"° from true north.",
+ modules:{qibla:"The Qibla direction will appear after location permission is granted.",dua:"The supplication library will include Arabic texts and their references.",hadith:"Hadith will include source references and grading where established.",learn:"Lessons will be organized by level, with verified Qur’anic references and explanations."}
+},
+ar:{
+ welcome:"الإيمان في حياتنا اليومية",tagline:"رفيق روحاني أينما كنت.",
+ prayerTitle:"مواقيت الصلاة",locationUnset:"لم يتم تحديد الموقع",locate:"📍 استخدام موقعي",
+ methodLabel:"طريقة الحساب",autoMethod:"تلقائي (أقرب جهة معتمدة)",
+ prayerStatus:"اضغط على «استخدام موقعي» لعرض المواقيت. قد تختلف عن مواقيت مسجدك.",
+ quranTitle:"القرآن الكريم",basmala:"بسم الله الرحمن الرحيم",
+ quranNote:"البسملة — معنى الترجمة",discoverTitle:"اكتشف",
+ qibla:"اتجاه القبلة",dua:"الأدعية",hadith:"أحاديث موثقة",learn:"التعلم",
+ featureStatus:"ستضاف هذه الأقسام تدريجياً مع مراجع يمكن التحقق منها.",
+ names:["الفجر","الظهر","العصر","المغرب","العشاء"],loading:"جارٍ تحميل المواقيت…",
+ error:"الموقع أو الخدمة غير متاحين. تحقق من الأذونات وحاول مجدداً.",
+ qiblaReady:"اتجاه القبلة: ",degrees:"° من الشمال الجغرافي.",
+ modules:{qibla:"سيظهر اتجاه القبلة بعد السماح بتحديد الموقع.",dua:"ستتضمن مكتبة الأدعية النصوص العربية ومراجعها.",hadith:"ستعرض الأحاديث مع مصادرها ودرجة صحتها عند ثبوتها.",learn:"ستُنظم الدروس حسب المستوى مع مراجع قرآنية وشروح موثوقة."}
+}};
+let language="fr",coords=null;
+const $=id=>document.getElementById(id);
+function renderTimes(values){$("prayerTimes").innerHTML=translations[language].names.map((name,i)=>`<div class="prayer"><b>${name}</b><strong>${values[i]||"—"}</strong></div>`).join("");}
+function applyLanguage(){
+ language=$("language").value;const t=translations[language];
+ document.documentElement.lang=language;document.documentElement.dir=language==="ar"?"rtl":"ltr";
+ $("welcome").textContent=t.welcome;$("tagline").textContent=t.tagline;$("prayerTitle").textContent=t.prayerTitle;
+ $("locationName").textContent=coords?$("locationName").textContent:t.locationUnset;
+ $("locateButton").textContent=t.locate;$("methodLabel").textContent=t.methodLabel;
+ $("method").options[0].textContent=t.autoMethod;$("prayerStatus").textContent=t.prayerStatus;
+ $("quranTitle").textContent=t.quranTitle;$("basmalaTranslation").textContent=t.basmala;$("quranNote").textContent=t.quranNote;
+ $("discoverTitle").textContent=t.discoverTitle;$("qiblaLabel").textContent=t.qibla;$("duaLabel").textContent=t.dua;
+ $("hadithLabel").textContent=t.hadith;$("learnLabel").textContent=t.learn;$("featureStatus").textContent=t.featureStatus;
+ renderTimes(["—","—","—","—","—"]);
+}
+function showDate(){const locale={fr:"fr-FR",en:"en-GB",ar:"ar"}[language];$("today").textContent=new Intl.DateTimeFormat(locale,{dateStyle:"full"}).format(new Date());}
+$("language").addEventListener("change",()=>{applyLanguage();showDate();});
+renderTimes(["—","—","—","—","—"]);showDate();
+async function loadPrayerTimes(position){
+ const lat=position.coords.latitude,lon=position.coords.longitude;
+ coords={lat,lon};const method=$("method").value;
+ let url=`https://api.aladhan.com/v1/timings?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}`;
+ if(method)url+=`&method=${method}`;
+ const response=await fetch(url);if(!response.ok)throw new Error("API");
+ const json=await response.json();if(json.code!==200)throw new Error("API data");
+ const t=json.data.timings;renderTimes([t.Fajr,t.Dhuhr,t.Asr,t.Maghrib,t.Isha]);
+ $("locationName").textContent=json.data.meta.timezone||`${lat.toFixed(2)}, ${lon.toFixed(2)}`;
+ $("prayerStatus").textContent=`${json.data.date.readable} · ${json.data.meta.method.name}. ${translations[language].prayerStatus}`;
+}
+function requestLocation(){
+ const t=translations[language];$("prayerStatus").textContent=t.loading;
+ if(!navigator.geolocation){$("prayerStatus").textContent=t.error;return;}
+ navigator.geolocation.getCurrentPosition(async p=>{
+  try{await loadPrayerTimes(p);}catch(e){$("prayerStatus").textContent=t.error;}
+ },()=>{$("prayerStatus").textContent=t.error;},{enableHighAccuracy:false,timeout:15000,maximumAge:300000});
+}
+$("locateButton").addEventListener("click",requestLocation);
+$("method").addEventListener("change",()=>{if(coords)requestLocationFromCoords();});
+async function requestLocationFromCoords(){
+ const t=translations[language];$("prayerStatus").textContent=t.loading;
+ try{await loadPrayerTimes({coords});}catch(e){$("prayerStatus").textContent=t.error;}
+}
+async function loadQibla(){
+ const result=$("qiblaResult");result.hidden=false;
+ if(!coords){result.textContent=translations[language].modules.qibla;return;}
+ try{
+  const r=await fetch(`https://api.aladhan.com/v1/qibla/${coords.lat}/${coords.lon}`);
+  if(!r.ok)throw new Error("API");const j=await r.json();
+  result.textContent=translations[language].qiblaReady+Number(j.data.direction).toFixed(1)+translations[language].degrees;
+ }catch(e){result.textContent=translations[language].error;}
+}
+$("qiblaButton").addEventListener("click",()=>{if(!coords){requestLocation();$("qiblaResult").hidden=false;$("qiblaResult").textContent=translations[language].modules.qibla;}else loadQibla();});
+$("duaButton").addEventListener("click",()=>{$("featureStatus").textContent=translations[language].modules.dua;});
+$("hadithButton").addEventListener("click",()=>{$("featureStatus").textContent=translations[language].modules.hadith;});
+$("learnButton").addEventListener("click",()=>{$("featureStatus").textContent=translations[language].modules.learn;});
+</script>
+</body>
+</html>
